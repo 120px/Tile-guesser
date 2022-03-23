@@ -1,4 +1,5 @@
 let first_flipped_value = ""
+let first_flipped_card = ""
 
 const card = {
     id: Number,
@@ -10,7 +11,7 @@ const card = {
 
 const arrayOfWords = ["dog", "cat", "bird"]
 const gameArea = document.getElementById("game-area-board")
-
+const timer_time = document.getElementById("timer-time")
 //fetch to get the json contents
 //put it in here
 
@@ -19,68 +20,78 @@ function displayCards(jsonObject) {
     // arrayOfWords = jsonObject["words"]
 
     for (let i = 0; i < 16; i++) {
-        const element = document.createElement("div")
-        element.className = "card"
-        element.setAttribute("isFlipped", "false")
-        element.style = "width: 12rem; height: 12rem;"
+        const card = document.createElement("div")
+        card.className = "card"
+        card.setAttribute("isFlipped", "false")
+        card.style = "width: 12rem; height: 12rem;"
+        card.id = 1
 
-        element.addEventListener("click", (e) => {
-            if (e.target.getAttribute("isFlipped") == "true"){
-                return
-            }
+        card.addEventListener("click", (e) => {
 
-            if (first_flipped_value === ""){
-                first_flipped_value = e.target.innerText
-                e.target.className = "card-body card-flipped"
-                e.target.setAttribute("isFlipped", "true")
-                console.log(first_flipped_value)
+            card.classList.toggle("card-flipped")
+            console.log(e.target)
 
-
-            }else if (first_flipped_value === e.target.innerText){
+            if (first_flipped_value === "") {
+                first_flipped_value = e.target.id
+                first_flipped_card = e.target
+            }else if (first_flipped_value === e.target.id){
                 first_flipped_value = ""
-                e.target.setAttribute("isFlipped", "true")
-                element.className = "card card-flipped"
-                console.log(first_flipped_value)
-
-            }else {
-                e.target.setAttribute("isFlipped", "false")
-                element.setAttribute("isFlipped", "false")
-                element.className = "card card-not-flipped"
+                first_flipped_card.className = "card card-success"
+                e.target.className = "card card-success"
+            }else{
                 first_flipped_value = ""
-                console.log(first_flipped_value)
-                
+                first_flipped_card.className = "card"
+                e.target.className = "card card-wrong"
             }
-
-            // if (element.getAttribute("isFlipped") == "false") {
-            //     element.setAttribute("isFlipped", "true")
-            //     element.className = "card card-flipped"
-            // }
-            // else if (element.getAttribute("isFlipped") == "true") {
-            //     element.setAttribute("isFlipped", "false")
-            //     element.className = "card card-not-flipped"
-            // }
-
+            
         })
 
-        const element2 = document.createElement("div")
-        element2.className = "card-body"
+        const cardFront = document.createElement("div")
+        cardFront.className = "card-body-front"
+        cardFront.id = 3
+    
+        const cardFrontTitle = document.createElement("h5")
+        cardFrontTitle.innerHTML = "?"
 
-        const title = document.createElement("h5")
-        title.className = "card-title"
-        title.innerHTML = jsonObject["words"][i]
+        cardFront.appendChild(cardFrontTitle)
+        card.appendChild(cardFront)
 
-        element2.appendChild(title)
-        element.appendChild(element2)
+        const cardBack = document.createElement("div")
 
-        gameArea.appendChild(element)
+        cardBack.className = "card-body-back"
+    
+        const cardBackTitle = document.createElement("div")
+        cardBackTitle.style.backgroundImage = ("url('https://media.istockphoto.com/photos/red-generic-sedan-car-isolated-on-white-background-3d-illustration-picture-id1189903200?k=20&m=1189903200&s=612x612&w=0&h=L2bus_XVwK5_yXI08X6RaprdFKF1U9YjpN_pVYPgS0o=')")
+        cardBackTitle.id = 3
+
+        cardBack.appendChild(cardBackTitle)
+        card.appendChild(cardBack)
+
+        gameArea.appendChild(card)
+
     }
+}
+
+function startTimer() {
+
+    var start = Date.now();
+setInterval(function() {
+    var delta = Date.now() - start; // milliseconds elapsed since start
+    
+    timer_time.innerHTML = (Math.floor(delta / 1000)); // in seconds
+
+}, 1000); // update about every second
+
 }
 
 const startButton = document.getElementById("btnStartGame")
 startButton.addEventListener("click", () => {
 
-
+    startButton.disabled = true
     displayCards(json)
+    startTimer()
+
+
 })
 
 let json = {

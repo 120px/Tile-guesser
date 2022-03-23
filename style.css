@@ -2,8 +2,8 @@ body{margin:  0;}
 
 .game-area-container{
     background-color: rgb(112, 107, 107);
-    height: 778px;
-    width: 778px;
+    height: 930px;
+    width: 950;
     margin: auto;
     display: flex;   
     border: 4px solid black;
@@ -18,25 +18,96 @@ body{margin:  0;}
     
 }
 
+.time-container{
+    left: 225px;
+}
+
 .card{
     transition: 1s;
+    height: 400px;
+    width: 300px;
+    margin: 20px;
+    transform-style: preserve-3d;
+    perspective: 600px;
+    transition: .5s;
     
 }
 
-.card:hover{
+.card{
     -webkit-box-shadow: 1px 1px 15px 5px rgba(0,0,0,0.35); 
     box-shadow: 1px 1px 15px 5px rgba(0,0,0,0.35);
+    z-index: 100;
+       
+}
+
+.card-success{
+    transform: rotateX(180deg);
+    border: 4px solid green;
+    width: 
 
 }
+
+.card-wrong{
+    animation: card-wrong 2s;
+}
+
+@keyframes card-wrong {
+    0% {
+        transform: rotateX(0deg);
+      }
+      
+      30% {
+        transform: rotateX(180deg);
+      }
+
+      50% {
+        transform: rotateX(180deg);
+      }
+      100% {
+        transform: rotateX(0deg);
+      }
+}
+
 
 .btnStartGame-container{
     margin-top: 30px;
 }
 
 .card-flipped{
-    background-color: aquamarine;
+    transform: rotateX(-180deg);
 }
 
 .card-not-flipped{
     background-color: white;
+    
+}
+
+.card-body-front{
+    background-size: cover;
+    position: absolute;
+    top: 75;
+    left: 50%;
+    backface-visibility: hidden;
+    color: black;
+
+}
+
+.card-body-back{
+    height: 100%;
+    width: 100%;
+    backface-visibility: hidden;
+    transform: rotateX(180deg);
+    transition: .5s;
+    color: black;
+    text-align: center;
+
+}
+
+.card-body-back div{
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    background-position: 50% 50%;
+    background-size: cover;
+    left: 0;
 }
