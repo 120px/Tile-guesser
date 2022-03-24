@@ -98,6 +98,10 @@ function displayCards(jsonObject) {
             card.classList.toggle("card-flipped")
             console.log(e.target)
 
+            if (first_flipped_card == "card card-success"){
+                return
+            }
+
             //dealing with the user inputs
             if (first_flipped_value === "") {
                 first_flipped_value = e.target.id
