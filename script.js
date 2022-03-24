@@ -1,3 +1,46 @@
+const pictures = [
+    {
+        url: "./images/bear.png",
+        id: 0,
+        counter: 2
+    },
+    {
+        url: "./images/cool.png",
+        id: 1,
+        counter: 2
+    },
+    {
+        url: "./images/cow.png",
+        id: 2,
+        counter: 2
+    },
+    {
+        url: "./images/hedgehog.png",
+        id: 3,
+        counter: 2
+    },
+    {
+        url: "./images/lion.png",
+        id: 4,
+        counter: 2
+    },
+    {
+        url: "./images/panda.png",
+        id: 5,
+        counter: 2
+    },
+    {
+        url: "./images/pig.png",
+        id: 6,
+        counter: 2
+    },
+    {
+        url: "./images/sheep.png",
+        id: 7,
+        counter: 2
+    }
+];
+
 let first_flipped_value = ""
 let first_flipped_card = ""
 let pointCounter = 0
@@ -19,7 +62,7 @@ const btnSubmitResults = document.getElementById("btnSubmitResults")
 
 
 //event listeners
-btnSubmitResults.addEventListener("click" , (e) => {
+btnSubmitResults.addEventListener("click", (e) => {
     sendResultsToDB()
 })
 
@@ -36,13 +79,19 @@ function displayCards(jsonObject) {
 
     //looping to display & create the cards
     for (let i = 0; i < 16; i++) {
+        //get images from backend, populate them randomly
+        let randomPicture = pictures[Math.floor(Math.random() * pictures.length)];
+        while (randomPicture.counter === 0) {
+            randomPicture = pictures[Math.floor(Math.random() * pictures.length)];
+        }
+        randomPicture.counter--;
 
         //creating the cards dynamically
         const card = document.createElement("div")
         card.className = "card"
         card.setAttribute("isFlipped", "false")
         card.style = "width: 12rem; height: 12rem;"
-        card.id = 1
+        card.id = randomPicture.id;
 
         card.addEventListener("click", (e) => {
 
@@ -61,7 +110,7 @@ function displayCards(jsonObject) {
                 pointCounter += 1
                 console.log(pointCounter)
 
-                if (pointCounter == 1) {
+                if (pointCounter == 8) {
 
                     stopTimer()
                     modal.style.display = "block"
@@ -92,9 +141,7 @@ function displayCards(jsonObject) {
 
         const cardBackTitle = document.createElement("div")
 
-        //get images from backend, populate them randomly
-        cardBackTitle.style.backgroundImage = ("url('https://media.istockphoto.com/photos/red-generic-sedan-car-isolated-on-white-background-3d-illustration-picture-id1189903200?k=20&m=1189903200&s=612x612&w=0&h=L2bus_XVwK5_yXI08X6RaprdFKF1U9YjpN_pVYPgS0o=')")
-        cardBackTitle.id = 3
+        cardBackTitle.style.backgroundImage = (`url('${randomPicture.url}')`);
 
         cardBack.appendChild(cardBackTitle)
         card.appendChild(cardBack)
@@ -108,14 +155,14 @@ function sendResultsToDB() {
 
     let usernameInput = document.getElementById("usernameInput").value
 
-    let data = {username : usernameInput, time : winnerTimer.innerHTML.split(" ")[0]}
+    let data = { username: usernameInput, time: winnerTimer.innerHTML.split(" ")[0] }
     console.log(data)
 
     fetch("/winner", {
 
         method: "POST",
-        body : data,
-        headers: {'Content-Type': 'application/json'}
+        body: data,
+        headers: { 'Content-Type': 'application/json' }
     })
 }
 
@@ -128,7 +175,7 @@ function startTimer() {
         timer_time.innerHTML = (Math.floor(delta / 1000));
         totalTimer = (Math.floor(delta / 1000));
 
-        console.log(totalTimer)
+        // console.log(totalTimer)
         return totalTimer
     }, 1000);
 
