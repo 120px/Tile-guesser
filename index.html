@@ -31,20 +31,33 @@
         <h3 id="timer-time">00:00</h3>
     </div>
 
+    <div id="myModal" class="modal">
+
+        <div class="modal-content">
+            <div class="text-center">
+                <h3 class="">Winner!</h3>
+                <p>Claim your spot on the leaderboard!</p>
+                <div class="mb-3">
+                    <label for="username" class="form-label">Username</label>
+                    <input type="username" class="form-control" id="usernameInput" placeholder="Username...">
+                </div>
+                <div class="mb-3">
+                    <h5 id="winner-timer">Total Time: </h5>
+                </div>
+
+                <div class="text-center">
+                    <button id="btnSubmitResults" type="button" class="btn btn-primary" onsubmit="">Submit</button>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
     <div class="game-area-container">
         <div>
             <div id="game-area-board" class="game-area-board">
 
-                <!-- <div class="card" style="width: 12rem; height: 12rem;">
-                    <div class="card-body card-body-front">
-                        <h5 class="">Front</h5>
-                    </div>
-                    <div class="card-body card-body-back">
-                        <h5 class="">Back</h5>
-                    </div>  
-
-                </div> -->
-                
             </div>
 
         </div>

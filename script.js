@@ -1,5 +1,7 @@
 let first_flipped_value = ""
 let first_flipped_card = ""
+let pointCounter = 0
+let totalTimer = 0
 
 const card = {
     id: Number,
@@ -8,18 +10,34 @@ const card = {
     guessedCorrectly: Boolean
 
 }
-
-const arrayOfWords = ["dog", "cat", "bird"]
+const startButton = document.getElementById("btnStartGame")
 const gameArea = document.getElementById("game-area-board")
 const timer_time = document.getElementById("timer-time")
+const modal = document.getElementById("myModal")
+const winnerTimer = document.getElementById("winner-timer")
+const btnSubmitResults = document.getElementById("btnSubmitResults")
+
+
+//event listeners
+btnSubmitResults.addEventListener("click" , (e) => {
+    sendResultsToDB()
+})
+
+startButton.addEventListener("click", () => {
+
+    startButton.disabled = true
+    displayCards()
+    startTimer()
+})
+
 //fetch to get the json contents
 //put it in here
-
 function displayCards(jsonObject) {
 
-    // arrayOfWords = jsonObject["words"]
-
+    //looping to display & create the cards
     for (let i = 0; i < 16; i++) {
+
+        //creating the cards dynamically
         const card = document.createElement("div")
         card.className = "card"
         card.setAttribute("isFlipped", "false")
@@ -31,25 +49,37 @@ function displayCards(jsonObject) {
             card.classList.toggle("card-flipped")
             console.log(e.target)
 
+            //dealing with the user inputs
             if (first_flipped_value === "") {
                 first_flipped_value = e.target.id
                 first_flipped_card = e.target
-            }else if (first_flipped_value === e.target.id){
+            } else if (first_flipped_value === e.target.id) {
                 first_flipped_value = ""
                 first_flipped_card.className = "card card-success"
                 e.target.className = "card card-success"
-            }else{
+
+                pointCounter += 1
+                console.log(pointCounter)
+
+                if (pointCounter == 1) {
+
+                    stopTimer()
+                    modal.style.display = "block"
+                    winnerTimer.innerHTML = totalTimer + " seconds"
+
+                }
+            } else {
                 first_flipped_value = ""
                 first_flipped_card.className = "card"
                 e.target.className = "card card-wrong"
             }
-            
+
         })
 
         const cardFront = document.createElement("div")
         cardFront.className = "card-body-front"
         cardFront.id = 3
-    
+
         const cardFrontTitle = document.createElement("h5")
         cardFrontTitle.innerHTML = "?"
 
@@ -59,8 +89,10 @@ function displayCards(jsonObject) {
         const cardBack = document.createElement("div")
 
         cardBack.className = "card-body-back"
-    
+
         const cardBackTitle = document.createElement("div")
+
+        //get images from backend, populate them randomly
         cardBackTitle.style.backgroundImage = ("url('https://media.istockphoto.com/photos/red-generic-sedan-car-isolated-on-white-background-3d-illustration-picture-id1189903200?k=20&m=1189903200&s=612x612&w=0&h=L2bus_XVwK5_yXI08X6RaprdFKF1U9YjpN_pVYPgS0o=')")
         cardBackTitle.id = 3
 
@@ -72,30 +104,38 @@ function displayCards(jsonObject) {
     }
 }
 
+function sendResultsToDB() {
+
+    let usernameInput = document.getElementById("usernameInput").value
+
+    let data = {username : usernameInput, time : winnerTimer.innerHTML.split(" ")[0]}
+    console.log(data)
+
+    fetch("/winner", {
+
+        method: "POST",
+        body : data,
+        headers: {'Content-Type': 'application/json'}
+    })
+}
+
 function startTimer() {
 
     var start = Date.now();
-setInterval(function() {
-    var delta = Date.now() - start; // milliseconds elapsed since start
-    
-    timer_time.innerHTML = (Math.floor(delta / 1000)); // in seconds
+    setInterval(function () {
+        var delta = Date.now() - start;
 
-}, 1000); // update about every second
+        timer_time.innerHTML = (Math.floor(delta / 1000));
+        totalTimer = (Math.floor(delta / 1000));
+
+        console.log(totalTimer)
+        return totalTimer
+    }, 1000);
 
 }
 
-const startButton = document.getElementById("btnStartGame")
-startButton.addEventListener("click", () => {
+function stopTimer() {
+    clearInterval(totalTimer);
 
-    startButton.disabled = true
-    displayCards(json)
-    startTimer()
-
-
-})
-
-let json = {
-    "words": [
-        "bird", "cat", "dog", "elephant", "tiger", "frog", "cow", "horse", "bird", "cat", "dog", "elephant", "tiger", "frog", "cow", "horse"
-    ]
 }
+
