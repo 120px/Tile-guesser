@@ -41,11 +41,6 @@ const pictures = [
     }
 ];
 
-let first_flipped_value = ""
-let first_flipped_card = ""
-let pointCounter = 0
-let totalTimer = 0
-
 const card = {
     id: Number,
     word: String,
@@ -53,6 +48,12 @@ const card = {
     guessedCorrectly: Boolean
 
 }
+
+let first_flipped_value = ""
+let first_flipped_card = ""
+let pointCounter = 0
+let totalTimer = 0
+
 const startButton = document.getElementById("btnStartGame")
 const gameArea = document.getElementById("game-area-board")
 const timer_time = document.getElementById("timer-time")
@@ -114,7 +115,7 @@ function displayCards(jsonObject) {
                 pointCounter += 1
                 console.log(pointCounter)
 
-                if (pointCounter == 8) {
+                if (pointCounter == 1) {
 
                     stopTimer()
                     modal.style.display = "block"
@@ -160,12 +161,19 @@ function sendResultsToDB() {
     let usernameInput = document.getElementById("usernameInput").value
 
     let data = { username: usernameInput, time: winnerTimer.innerHTML.split(" ")[0] }
+    data = JSON.stringify(data)
     console.log(data)
 
-    fetch("/winner", {
-
+    fetch("/submitWinnerDetails", {
+        
         method: "POST",
         body: data,
+        headers: { 'Content-Type': 'application/json' }
+
+    })
+
+    fetch("/leaderboards", {
+        method: "GET",
         headers: { 'Content-Type': 'application/json' }
     })
 }
