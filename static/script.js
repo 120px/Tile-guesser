@@ -115,7 +115,7 @@ function displayCards(jsonObject) {
                 pointCounter += 1
                 console.log(pointCounter)
 
-                if (pointCounter == 1) {
+                if (pointCounter == 8) {
 
                     stopTimer()
                     modal.style.display = "block"

@@ -6,7 +6,6 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
-	"time"
 )
 
 type leaderBoardEntry struct {
@@ -25,8 +24,6 @@ func main() {
 	http.ListenAndServe(":1200", nil)
 
 }
-
-var myClient = &http.Client{Timeout: 10 * time.Second}
 
 func writeToLeaderboard(w http.ResponseWriter, res *http.Request) {
 	var result leaderBoardEntry
